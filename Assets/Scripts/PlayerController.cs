@@ -9,6 +9,7 @@ public class PlayerController : MonoBehaviour {
     float maxMovementSpeed = 3f;
     float jumpSpeed = 6f;
     float fallModifier = 2.5f;
+    float maxFallSpeed = 5f;
 
     float horizontalMove = 0f;
 

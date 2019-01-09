@@ -4,13 +4,18 @@ using UnityEngine;
 
 public class Platform : MonoBehaviour {
 
-	// Use this for initialization
-	void Start () {
-		
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
+    private static float speed = 1;
+
+    void Start() {
+        resetPlatform();
+    }
+
+    public void resetPlatform() {
+        GetComponent<Rigidbody2D>().velocity = Vector2.down * speed;
+    }
+
+    public static void IncreaseSpeed(float value) {
+        if (value <= 0) return;
+        speed += value;
+    }
 }
