@@ -16,15 +16,26 @@ public class PlayerController : MonoBehaviour {
     bool canJump = false;
     bool doubleJump = true;
     bool isJumping = false;
+
+    int points;
+    int currency;
     
     Rigidbody2D rb;
     Vector2 velocity = new Vector2(0,0);
 
     void Awake() {
         rb = GetComponent<Rigidbody2D>();
+        points = 0;
+        currency = 0;
     }
 
     void Update() {
+
+        if (rb.velocity.y > 0) {
+            GetComponent<BoxCollider2D>().enabled = false;
+        } else {
+            GetComponent<BoxCollider2D>().enabled = true;
+        }
 
         //gets left & right input
         horizontalMove = Input.GetAxisRaw("Horizontal");
@@ -60,12 +71,12 @@ public class PlayerController : MonoBehaviour {
         //adds force for left and right movement
         if (horizontalMove < 0) {
             // if player changes directions, adds a force to "cancel" out its current velocity
-            if (rb.velocity.x > 0) rb.AddForce(rb.velocity.x * Vector2.right * -1, ForceMode2D.Impulse);
+            if (rb.velocity.x > 0) rb.AddForce((rb.velocity.x * 0.5f) * Vector2.right * -1, ForceMode2D.Impulse);
 
             rb.AddForce(Vector2.right * -1 * movementSpeed, ForceMode2D.Force);
         } else if (horizontalMove > 0) {
             // if player changes directions, adds a force to "cancel" out its current velocity
-            if (rb.velocity.x < 0) rb.AddForce(rb.velocity.x * Vector2.right * -1, ForceMode2D.Impulse);
+            if (rb.velocity.x < 0) rb.AddForce((rb.velocity.x * 0.5f) * Vector2.right * -1, ForceMode2D.Impulse);
 
             rb.AddForce(Vector2.right * movementSpeed, ForceMode2D.Force);
         } else if (horizontalMove == 0 && rb.velocity.x != 0) {
@@ -76,15 +87,24 @@ public class PlayerController : MonoBehaviour {
 	}
 
     private void OnCollisionEnter2D(Collision2D collision) {
-        if (collision.gameObject.tag == "Floor") {
+        if (collision.gameObject.layer == LayerMask.NameToLayer("Floor")) {
             canJump = true;
+            points += collision.gameObject.GetComponent<Platform>().collectPoints();
+        }
+        if (collision.gameObject.layer == LayerMask.NameToLayer("Collectible")) {
+            currency += collision.gameObject.GetComponent<Collectible>().getValue();
+        }
+        if (collision.gameObject.layer == LayerMask.NameToLayer("Hazard")) {
+            //if can kill, end game
+            //if cant kill, subtract points / currency or apply debuff or something
         }
     }
 
     private void OnCollisionExit2D(Collision2D collision) {
-        if (collision.gameObject.tag == "Floor") {
+        if (collision.gameObject.layer == LayerMask.NameToLayer("Floor")) {
             canJump = false;
             doubleJump = true;
         }
+        
     }
 }

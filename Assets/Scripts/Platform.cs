@@ -4,18 +4,17 @@ using UnityEngine;
 
 public class Platform : MonoBehaviour {
 
-    private static float speed = 1;
+    private bool pointsCollected = false;
+    public int points = 100;
 
-    void Start() {
-        resetPlatform();
+    public void Update() {
+        //Can I simulate jumping by making the platforms fall instead of the character jump
+        GetComponent<Rigidbody2D>().velocity = Vector2.down * GlobalSettings.speed;
     }
 
-    public void resetPlatform() {
-        GetComponent<Rigidbody2D>().velocity = Vector2.down * speed;
-    }
-
-    public static void IncreaseSpeed(float value) {
-        if (value <= 0) return;
-        speed += value;
+    public int collectPoints() {
+        if (pointsCollected) return 0;
+        pointsCollected = true;
+        return points;
     }
 }

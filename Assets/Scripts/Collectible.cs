@@ -4,13 +4,24 @@ using UnityEngine;
 
 public class Collectible : MonoBehaviour {
 
+    private int currencyType;
+    private int value;
+
 	// Use this for initialization
 	void Start () {
-		
+        currencyType = 0;
+        value = 1;
 	}
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
+
+    void Update() {
+        GetComponent<Rigidbody2D>().velocity = Vector2.down * GlobalSettings.speed;
+    }
+
+    public int getCurrencyType() {
+        return currencyType;
+    }
+
+    public int getValue() {
+        return value;
+    }
 }

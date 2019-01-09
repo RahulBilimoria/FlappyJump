@@ -4,13 +4,24 @@ using UnityEngine;
 
 public class Enemy : MonoBehaviour {
 
+    private bool canKill;
+    private int value;
+
 	// Use this for initialization
 	void Start () {
-		
+        canKill = true;
+        value = 1;
 	}
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
+
+    void Update() {
+        GetComponent<Rigidbody2D>().velocity = Vector2.down * GlobalSettings.speed;
+    }
+
+    public bool getCanKill() {
+        return canKill;
+    }
+
+    public int getValue() {
+        return value;
+    }
 }
