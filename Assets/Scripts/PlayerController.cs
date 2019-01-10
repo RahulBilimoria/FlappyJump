@@ -8,7 +8,7 @@ public class PlayerController : MonoBehaviour {
     float movementSpeed = 5f;
     float maxMovementSpeed = 3f;
     float jumpSpeed = 6f;
-    float fallModifier = 2.5f;
+    float fallModifier = 1.5f;
     float maxFallSpeed = 5f;
 
     float horizontalMove = 0f;
@@ -30,7 +30,6 @@ public class PlayerController : MonoBehaviour {
     }
 
     void Update() {
-
         if (rb.velocity.y > 0) {
             GetComponent<BoxCollider2D>().enabled = false;
         } else {
@@ -71,12 +70,12 @@ public class PlayerController : MonoBehaviour {
         //adds force for left and right movement
         if (horizontalMove < 0) {
             // if player changes directions, adds a force to "cancel" out its current velocity
-            if (rb.velocity.x > 0) rb.AddForce((rb.velocity.x * 0.5f) * Vector2.right * -1, ForceMode2D.Impulse);
+            if (rb.velocity.x > 0) rb.AddForce((rb.velocity.x * 0.25f) * Vector2.right * -1, ForceMode2D.Impulse);
 
             rb.AddForce(Vector2.right * -1 * movementSpeed, ForceMode2D.Force);
         } else if (horizontalMove > 0) {
             // if player changes directions, adds a force to "cancel" out its current velocity
-            if (rb.velocity.x < 0) rb.AddForce((rb.velocity.x * 0.5f) * Vector2.right * -1, ForceMode2D.Impulse);
+            if (rb.velocity.x < 0) rb.AddForce((rb.velocity.x * 0.25f) * Vector2.right * -1, ForceMode2D.Impulse);
 
             rb.AddForce(Vector2.right * movementSpeed, ForceMode2D.Force);
         } else if (horizontalMove == 0 && rb.velocity.x != 0) {
@@ -91,12 +90,18 @@ public class PlayerController : MonoBehaviour {
             canJump = true;
             points += collision.gameObject.GetComponent<Platform>().collectPoints();
         }
+        
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision) {
         if (collision.gameObject.layer == LayerMask.NameToLayer("Collectible")) {
             currency += collision.gameObject.GetComponent<Collectible>().getValue();
+            collision.gameObject.SetActive(false);
         }
         if (collision.gameObject.layer == LayerMask.NameToLayer("Hazard")) {
             //if can kill, end game
             //if cant kill, subtract points / currency or apply debuff or something
+            collision.gameObject.SetActive(false);
         }
     }
 

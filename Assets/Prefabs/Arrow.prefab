@@ -23,6 +23,7 @@ GameObject:
   - component: {fileID: 95632832263340090}
   - component: {fileID: 61349604539835160}
   - component: {fileID: 50705648339624304}
+  - component: {fileID: 114854066031689798}
   m_Layer: 10
   m_Name: Arrow
   m_TagString: Spawnable
@@ -106,6 +107,17 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &114854066031689798
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1398796169819374}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b44b130af20b71f4cac43e2f45c600c2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!212 &212572777274211502
 SpriteRenderer:
   m_ObjectHideFlags: 1
