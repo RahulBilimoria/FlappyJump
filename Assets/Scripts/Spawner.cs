@@ -10,6 +10,8 @@ public class Spawner : MonoBehaviour {
     public float spawnInterval = 1.0f;
     private float spawnLastTime;
 
+    public bool chooseSprite = false;
+
     //Size of the spawnable area
     float leftPos, rightPos;
     //Time variance for spawning an object (might move to the object pooler script)
@@ -52,6 +54,9 @@ public class Spawner : MonoBehaviour {
     void InitializeGameObject(GameObject obj, Vector2 pos) {
         if (obj == null) return;
         obj.transform.position = pos;
+        if (chooseSprite) {
+            obj.GetComponent<SpriteRenderer>().sprite = obj.GetComponent<SpriteChooser>().getRandomSprite();
+        }
         obj.SetActive(true);
     }
 }

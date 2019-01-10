@@ -86,7 +86,7 @@ public class PlayerController : MonoBehaviour {
 	}
 
     private void OnCollisionEnter2D(Collision2D collision) {
-        if (collision.gameObject.layer == LayerMask.NameToLayer("Floor")) {
+        if (collision.gameObject.layer == LayerMask.NameToLayer("Floor") && collision.gameObject.tag == "Spawnable") {
             canJump = true;
             points += collision.gameObject.GetComponent<Platform>().collectPoints();
         }
