@@ -24,7 +24,7 @@ GameObject:
   - component: {fileID: 114713659270993360}
   m_Layer: 0
   m_Name: Cloud
-  m_TagString: Untagged
+  m_TagString: Spawnable
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -73,7 +73,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eb4159be4f38d2b4f9671cf4680fcf39, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  direction: {x: 1, y: 0}
+  direction: {x: 1, y: -0.25}
   speedModifier: 0.25
 --- !u!212 &212295622187209806
 SpriteRenderer:

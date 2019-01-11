@@ -6,7 +6,7 @@ public class Despawner : MonoBehaviour {
 
     // Use this for initialization
     private void OnTriggerExit2D(Collider2D collision) {
-        if (collision.gameObject.tag == "Spawnable") {
+        if (collision.gameObject.tag == "Spawnable" || collision.gameObject.tag == "Floor") {
             DespawnObject(collision.gameObject);
         }
     }

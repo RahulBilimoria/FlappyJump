@@ -16,6 +16,7 @@ public class PlayerController : MonoBehaviour {
     bool canJump = false;
     bool doubleJump = true;
     bool isJumping = false;
+    bool gameStarted = false;
 
     int points;
     int currency;
@@ -31,9 +32,9 @@ public class PlayerController : MonoBehaviour {
 
     void Update() {
         if (rb.velocity.y > 0) {
-            GetComponent<BoxCollider2D>().enabled = false;
+            GetComponent<CircleCollider2D>().isTrigger = true;
         } else {
-            GetComponent<BoxCollider2D>().enabled = true;
+            GetComponent<CircleCollider2D>().isTrigger = false;
         }
 
         //gets left & right input
@@ -51,6 +52,7 @@ public class PlayerController : MonoBehaviour {
 
     // Update is called once per frame
     void FixedUpdate () {
+
         //changes gravity to make player fall faster
         if (rb.velocity.y < 0) {
             rb.gravityScale = fallModifier;
@@ -90,7 +92,6 @@ public class PlayerController : MonoBehaviour {
             canJump = true;
             points += collision.gameObject.GetComponent<Platform>().collectPoints();
         }
-        
     }
 
     private void OnTriggerEnter2D(Collider2D collision) {
@@ -105,7 +106,17 @@ public class PlayerController : MonoBehaviour {
         }
     }
 
+    private void OnCollisionStay2D(Collision2D collision) {
+        if (collision.gameObject.layer == LayerMask.NameToLayer("Floor") && collision.gameObject.tag == "Spawnable") {
+            canJump = true;
+        }
+    }
+
     private void OnCollisionExit2D(Collision2D collision) {
+        if (!GlobalSettings.gameStarted) {
+            GlobalSettings.gameStarted = true;
+            GlobalSettings.speed = 1.0f;
+        }
         if (collision.gameObject.layer == LayerMask.NameToLayer("Floor")) {
             canJump = false;
             doubleJump = true;

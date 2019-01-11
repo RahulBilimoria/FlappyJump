@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Enemy : MonoBehaviour {
+public class Enemy : Moveable {
 
-    private bool canKill;
+    public bool canKill = true;
     private int value;
 
 	// Use this for initialization
@@ -12,10 +12,6 @@ public class Enemy : MonoBehaviour {
         canKill = true;
         value = 1;
 	}
-
-    void Update() {
-        GetComponent<Rigidbody2D>().velocity = Vector2.down * GlobalSettings.speed;
-    }
 
     public bool getCanKill() {
         return canKill;

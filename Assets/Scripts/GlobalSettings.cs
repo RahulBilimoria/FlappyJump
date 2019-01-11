@@ -4,5 +4,6 @@ using UnityEngine;
 
 public class GlobalSettings : MonoBehaviour {
 
-    public static float speed = 1.0f;
+    public static bool gameStarted = false;
+    public static float speed = 0.0f;
 }

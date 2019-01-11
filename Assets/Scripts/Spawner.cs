@@ -6,14 +6,15 @@ public class Spawner : MonoBehaviour {
 
     //List of all the spawnable objects
     ObjectPooler objectPool;
+    Bounds bb;
 
     public float spawnInterval = 1.0f;
     private float spawnLastTime;
 
     public bool chooseSprite = false;
+    public bool randomX = true, randomY = true;
+    public bool alternateX = false, alternateY = false;
 
-    //Size of the spawnable area
-    float leftPos, rightPos;
     //Time variance for spawning an object (might move to the object pooler script)
     float variance = 0.25f;
 
@@ -25,15 +26,28 @@ public class Spawner : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
         objectPool = gameObject.GetComponent<ObjectPooler>();
-
-        leftPos = transform.parent.transform.position.x; ;
-        rightPos = leftPos + transform.parent.transform.localScale.x;
-
-        spawnLastTime = Time.time;
+        bb = GetComponent<BoxCollider2D>().bounds;
 	}
 	
 	// Update is called once per frame
 	void Update () {
+        Vector2 spawnPosition;
+        if (!GlobalSettings.gameStarted) {
+            spawnLastTime = Time.time;
+            return;
+        }
+        spawnPosition.x = bb.min.x;
+        spawnPosition.y = bb.min.y;
+        if (randomX) {
+            spawnPosition.x = Random.Range(bb.min.x, bb.max.x);
+        } else if (alternateX) {
+            //spawnPosition.x = bb.max.x;
+        }
+        if (randomY) {
+            spawnPosition.y = Random.Range(bb.min.y, bb.max.y);
+        } else if (alternateY) {
+            //spawnPosition.y = bb.max.y;
+        }
         //Platform Speed Interval
         /*if (platformSpeedIncrease != 0 && Time.time - platformSpeedLastTime >= platformSpeedIncreaseInterval) {
             //as the speed increases, the interval between platforms has to decrease or there will be too little platforms on the screen
@@ -42,10 +56,10 @@ public class Spawner : MonoBehaviour {
         }*/
 
         //Platform Spawn Interval
-		if (Time.time - spawnLastTime >= spawnInterval + Random.Range(-variance, variance)) {
+		if (Time.time - spawnLastTime >= (spawnInterval + Random.Range(-variance, variance)) / GlobalSettings.speed) {
             //add option to spawn more than 1 platform at a time based on %
             spawnLastTime = Time.time;
-            Vector2 pos = new Vector2(Random.Range(leftPos, rightPos), transform.position.y);
+            Vector2 pos = spawnPosition;
             GameObject obj = objectPool.getPooledObject();
             InitializeGameObject(obj, pos);
         }
@@ -55,7 +69,7 @@ public class Spawner : MonoBehaviour {
         if (obj == null) return;
         obj.transform.position = pos;
         if (chooseSprite) {
-            obj.GetComponent<SpriteRenderer>().sprite = obj.GetComponent<SpriteChooser>().getRandomSprite();
+            obj.GetComponent<SpriteRenderer>().sprite = GetComponent<SpriteChooser>().getRandomSprite();
         }
         obj.SetActive(true);
     }
