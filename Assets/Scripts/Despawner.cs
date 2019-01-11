@@ -5,7 +5,7 @@ using UnityEngine;
 public class Despawner : MonoBehaviour {
 
     // Use this for initialization
-    private void OnTriggerEnter2D(Collider2D collision) {
+    private void OnTriggerExit2D(Collider2D collision) {
         if (collision.gameObject.tag == "Spawnable") {
             DespawnObject(collision.gameObject);
         }
