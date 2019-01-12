@@ -3,9 +3,16 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class SpringPlatform : Platform {
-	
-	// Update is called once per frame
-	void Update () {
-		//change bounding box size/location based on animation movemnt
-	}
+
+    Animator animator;
+    void Start() {
+        animator = GetComponent<Animator>();
+    }
+
+    private void OnCollisionEnter2D(Collision2D collision) {
+        if (collision.gameObject.tag == "Player") {
+            animator.SetTrigger("Activated");
+            collision.gameObject.GetComponent<PlayerController>().Jump();
+        }
+    }
 }

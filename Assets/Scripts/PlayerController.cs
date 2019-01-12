@@ -87,6 +87,11 @@ public class PlayerController : MonoBehaviour {
 
 	}
 
+    public void Jump() {
+        isJumping = true;
+        doubleJump = false;
+    }
+
     private void OnCollisionEnter2D(Collision2D collision) {
         if (collision.gameObject.layer == LayerMask.NameToLayer("Floor") && collision.gameObject.tag == "Spawnable") {
             canJump = true;

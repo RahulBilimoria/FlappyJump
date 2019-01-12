@@ -22,8 +22,8 @@ GameObject:
   - component: {fileID: 212784223235266040}
   - component: {fileID: 95387131400194196}
   - component: {fileID: 61764573991183006}
-  - component: {fileID: 114878285816257014}
   - component: {fileID: 50850698120162274}
+  - component: {fileID: 114591657049190342}
   m_Layer: 8
   m_Name: Platform-Spring
   m_TagString: Spawnable
@@ -107,7 +107,7 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
---- !u!114 &114878285816257014
+--- !u!114 &114591657049190342
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
@@ -115,7 +115,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1697411067599718}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bdba5fac57d285d41a7d6a0db88bddf4, type: 3}
+  m_Script: {fileID: 11500000, guid: d99593ae445c155459193b2a73bb89d2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   points: 100
