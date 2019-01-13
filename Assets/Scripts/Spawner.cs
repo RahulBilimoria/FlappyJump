@@ -72,5 +72,7 @@ public class Spawner : MonoBehaviour {
             obj.GetComponent<SpriteRenderer>().sprite = GetComponent<SpriteChooser>().getRandomSprite();
         }
         obj.SetActive(true);
+        //print(obj.GetComponent<Rigidbody2D>().Cast(Vector2.down, null));
+        //if (obj.GetComponent<Rigidbody2D>().Cast(Vector2.down, null, 0.75f) != 0) return;
     }
 }
