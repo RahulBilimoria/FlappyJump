@@ -1442,6 +1442,11 @@ Prefab:
       propertyPath: m_Name
       value: Platform (3)
       objectReference: {fileID: 0}
+    - target: {fileID: 61174443155973124, guid: 3e0f8fa790d122b4d856745fccf71033,
+        type: 2}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3e0f8fa790d122b4d856745fccf71033, type: 2}
   m_IsPrefabAsset: 0
@@ -1571,6 +1576,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bdba5fac57d285d41a7d6a0db88bddf4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  player: {fileID: 1635008851}
   points: 100
 --- !u!61 &1805406765
 BoxCollider2D:

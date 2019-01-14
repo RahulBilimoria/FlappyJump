@@ -31,11 +31,11 @@ public class PlayerController : MonoBehaviour {
     }
 
     void Update() {
-        if (rb.velocity.y > 0) {
+        /*if (rb.velocity.y > 0) {
             GetComponent<CircleCollider2D>().isTrigger = true;
         } else {
             GetComponent<CircleCollider2D>().isTrigger = false;
-        }
+        }*/
 
         //gets left & right input
         horizontalMove = Input.GetAxisRaw("Horizontal");
