@@ -31,11 +31,11 @@ public class PlayerController : MonoBehaviour {
     }
 
     void Update() {
-        /*if (rb.velocity.y > 0) {
+        if (rb.velocity.y > 0) {
             GetComponent<CircleCollider2D>().isTrigger = true;
         } else {
             GetComponent<CircleCollider2D>().isTrigger = false;
-        }*/
+        }
 
         //gets left & right input
         horizontalMove = Input.GetAxisRaw("Horizontal");
@@ -64,7 +64,6 @@ public class PlayerController : MonoBehaviour {
         if (isJumping) {
             // if player is falling, adds a force equal to its falling speed to simulate a jump in mid air
             Vector2 jumpForce = rb.velocity.y < 0 ? Vector2.up * (rb.velocity.y * -1 + jumpSpeed) : Vector2.up * jumpSpeed;
-
             rb.AddForce(jumpForce, ForceMode2D.Impulse);
             isJumping = false;
         }
