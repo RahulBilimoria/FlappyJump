@@ -1,8 +1,12 @@
-﻿using System.Collections;
+﻿using System.IO;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour {
+
+    public CharacterData data;
+    string dataPath;
 
     //change to public later
     float movementSpeed = 5f;
@@ -10,6 +14,11 @@ public class PlayerController : MonoBehaviour {
     float jumpSpeed = 6f;
     float fallModifier = 1.5f;
     float maxFallSpeed = 5f;
+
+    //upgrade modifiers
+    float movementSpeedMultiplier;
+    float maxMovementSpeedMultiplier;
+    float jumpSpeedMultiplier;
 
     float horizontalMove = 0f;
 
@@ -25,6 +34,8 @@ public class PlayerController : MonoBehaviour {
     Vector2 velocity = new Vector2(0,0);
 
     void Awake() {
+        dataPath = Path.Combine(Application.persistentDataPath, "CharacterData.txt");
+        data = SaveData.LoadGameData(dataPath);
         rb = GetComponent<Rigidbody2D>();
         points = 0;
         currency = 0;
@@ -63,7 +74,7 @@ public class PlayerController : MonoBehaviour {
         //adds force for jumping
         if (isJumping) {
             // if player is falling, adds a force equal to its falling speed to simulate a jump in mid air
-            Vector2 jumpForce = rb.velocity.y < 0 ? Vector2.up * (rb.velocity.y * -1 + jumpSpeed) : Vector2.up * jumpSpeed;
+            Vector2 jumpForce = rb.velocity.y < 0 ? Vector2.up * (rb.velocity.y * -1 + (jumpSpeed + jumpSpeed * data.jumpHeightModifier)) : Vector2.up * jumpSpeed;
             rb.AddForce(jumpForce, ForceMode2D.Impulse);
             isJumping = false;
         }
@@ -94,7 +105,7 @@ public class PlayerController : MonoBehaviour {
     private void OnCollisionEnter2D(Collision2D collision) {
         if (collision.gameObject.layer == LayerMask.NameToLayer("Floor") && collision.gameObject.tag == "Spawnable") {
             canJump = true;
-            points += collision.gameObject.GetComponent<Platform>().collectPoints();
+            points += (int)Mathf.Ceil(collision.gameObject.GetComponent<Platform>().collectPoints() * data.pointsMultiplier);
         }
     }
 
