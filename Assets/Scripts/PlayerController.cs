@@ -6,7 +6,6 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour {
 
     public CharacterData data;
-    string dataPath;
 
     //change to public later
     float movementSpeed = 5f;
@@ -34,11 +33,9 @@ public class PlayerController : MonoBehaviour {
     Vector2 velocity = new Vector2(0,0);
 
     void Awake() {
-        dataPath = Path.Combine(Application.persistentDataPath, "CharacterData.txt");
-        data = SaveData.LoadGameData(dataPath);
+        data = GlobalSettings.characterData;
         rb = GetComponent<Rigidbody2D>();
         points = 0;
-        currency = 0;
     }
 
     void Update() {
@@ -100,6 +97,10 @@ public class PlayerController : MonoBehaviour {
     public void Jump() {
         isJumping = true;
         doubleJump = false;
+    }
+
+    private void Save() {
+        SaveData.SaveGameData(data);
     }
 
     private void OnCollisionEnter2D(Collision2D collision) {

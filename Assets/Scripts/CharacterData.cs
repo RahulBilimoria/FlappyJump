@@ -1,20 +1,37 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[Serializable]
 public class CharacterData : MonoBehaviour {
-
-    //make whole class serializable??
     
     //Upgrades
-    public float jumpHeightModifier = 1.0f;
-    public float pointsMultiplier = 1.0f;
-    public int gemValueMultiplier = 1;
+    public float jumpHeightModifier;
+    public int jumpHeightModifierIndex;
+    public float pointsMultiplier;
+    public int pointsMultiplierIndex;
+    public int gemValueMultiplier;
+    public int gemValueMultiplierIndex;
 
     //High Scores
-    public float bestHeight = 0.0f;
-    public float bestScore = 0.0f;
+    public float bestHeight;
+    public float bestScore;
 
     //Other Player Settings
-    public string playerName = "Default";
+    public int currency;
+
+    public void loadDefault() {
+        jumpHeightModifier = 1.0f;
+        jumpHeightModifierIndex = 0;
+        pointsMultiplier = 1.0f;
+        pointsMultiplierIndex = 0;
+        gemValueMultiplier = 1;
+        gemValueMultiplierIndex = 0;
+
+        bestHeight = 0;
+        bestScore = 0;
+
+        currency = 0;
+    }
 }
