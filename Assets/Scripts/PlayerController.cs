@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public class PlayerController : MonoBehaviour {
 
@@ -18,33 +19,46 @@ public class PlayerController : MonoBehaviour {
     float movementSpeedMultiplier;
     float maxMovementSpeedMultiplier;
     float jumpSpeedMultiplier;
-
     float horizontalMove = 0f;
+    float lastY;
+    float height;
 
     bool canJump = false;
     bool doubleJump = true;
     bool isJumping = false;
     bool gameStarted = false;
+    bool paused = false;
 
     int points;
     int currency;
-    
+    int life;
+
+    public GameObject gameUI;
+    public GameObject pauseScreen;
+    public GameObject gameOverScreen;
+
+    public GameObject[] hitpoints = new GameObject[3];
+    public TextMeshProUGUI heightText;
     Rigidbody2D rb;
     Vector2 velocity = new Vector2(0,0);
 
     void Awake() {
-        data = GlobalSettings.characterData;
         rb = GetComponent<Rigidbody2D>();
         points = 0;
+        height = 0;
+        life = 3;
+        lastY = transform.position.y;
     }
 
     void Update() {
         if (rb.velocity.y > 0) {
             GetComponent<CircleCollider2D>().isTrigger = true;
+            height += transform.position.y - lastY;
+            heightText.text = "Height: " + (int)height + "m";
         } else {
             GetComponent<CircleCollider2D>().isTrigger = false;
         }
-
+        lastY = transform.position.y;
         //gets left & right input
         horizontalMove = Input.GetAxisRaw("Horizontal");
 
@@ -99,6 +113,29 @@ public class PlayerController : MonoBehaviour {
         doubleJump = false;
     }
 
+    public void Pause() {
+        GlobalSettings.speed = 0.0f;
+        pauseScreen.SetActive(true);
+        paused = true;
+    }
+
+    public void UnPause() {
+        pauseScreen.SetActive(true);
+        GlobalSettings.speed = 1.0f;
+        paused = false;
+    }
+
+    private void GameOver() {
+        //end spawners?
+        GlobalSettings.speed = 0.0f;
+        //Disable current UI when game ends or overlay game over screen on top of it
+        //show game over screen, enable all gameover screens, disable all ingame spawners etc.
+        //maybe some death animations
+        gameUI.SetActive(false);
+        pauseScreen.SetActive(false);
+        gameOverScreen.SetActive(true);
+    }
+
     private void Save() {
         SaveData.SaveGameData(data);
     }
@@ -119,6 +156,11 @@ public class PlayerController : MonoBehaviour {
             //if can kill, end game
             //if cant kill, subtract points / currency or apply debuff or something
             collision.gameObject.SetActive(false);
+            life--;
+            hitpoints[life].SetActive(false);
+            if (life <= 0) {
+                GameOver();
+            }
         }
     }
 
@@ -130,6 +172,7 @@ public class PlayerController : MonoBehaviour {
 
     private void OnCollisionExit2D(Collision2D collision) {
         if (!GlobalSettings.gameStarted) {
+            data = GlobalSettings.characterData;
             GlobalSettings.gameStarted = true;
             GlobalSettings.speed = 1.0f;
         }
@@ -137,6 +180,11 @@ public class PlayerController : MonoBehaviour {
             canJump = false;
             doubleJump = true;
         }
-        
+    }
+
+    private void OnTriggerExit2D(Collider2D collision) {
+        if (collision.gameObject.tag == "Finish") {
+            GameOver();
+        }
     }
 }

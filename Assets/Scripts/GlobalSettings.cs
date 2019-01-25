@@ -8,7 +8,7 @@ public class GlobalSettings : MonoBehaviour {
     public static float speed = 0.0f;
 
     public static GameObject player;
-    public static CharacterData characterData;
+    public static CharacterData characterData = new CharacterData();
 
     private void Awake() {
         player = GameObject.Find("Player");
