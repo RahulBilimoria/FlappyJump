@@ -42,15 +42,15 @@ public class SaveData : MonoBehaviour {
 
     private static string getPath(bool loadData) {
         string folderPath = Path.Combine(Application.persistentDataPath, "GameData");
+        if (!Directory.Exists(folderPath)) {
+            Directory.CreateDirectory(folderPath);
+        }
 
         if (loadData) {
-            if (folderPath.Length > 0)
+            if (Directory.GetFiles(folderPath, "Player1.dat").Length > 0) {
                 return Directory.GetFiles(folderPath, "Player1.dat")[0];
-            else return null;
+            } else return null;
         } else {
-            if (!Directory.Exists(folderPath)) {
-                Directory.CreateDirectory(folderPath);
-            }
             return Path.Combine(folderPath, "Player1.dat");
         }
     }
