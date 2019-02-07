@@ -12,20 +12,21 @@ public class UpgradesMenu : MonoBehaviour {
     public GameObject[] upgradeLabels = new GameObject[4];
 
     CharacterData data;
-    int upgradeCost = 1;
     int upgradeIndex = 0;
     int currentIndex = -1;
 
     int cost;
 
     private void Start() {
+        data = GlobalSettings.characterData;
         playerMoney.GetComponent<TextMeshProUGUI>().text = data.currency + " Gems";
-        UpdateLabels("", "", "", "");
+        UpdateLabels("Select an Upgrade", "", "", "");
     }
 
     public void SelectUpgrade(int value) {
         cost = 0;
         currentIndex = value;
+        string costString = "";
         string name = "",
                desc = "",
                val = "";
@@ -34,33 +35,46 @@ public class UpgradesMenu : MonoBehaviour {
             case 0: // Jump upgrade was selected
                 upgradeIndex = data.jumpHeightModifierIndex;
                 name = "Jump Height";
-                desc = "Increases jump height by 10%";
-                val = "Current value: " + data.jumpHeightModifierIndex * 10 + "% -> " + (data.jumpHeightModifierIndex + 1) * 10 + "%";
+                desc = "Increases jump height";
+                if (upgradeIndex >= 5)
+                    val = "Current value: " + data.jumpHeightModifierIndex * 10 + "%";
+                else
+                    val = "Current value: " + data.jumpHeightModifierIndex * 10 + "% -> " + (data.jumpHeightModifierIndex + 1) * 10 + "%";
                 break;
             case 1: // Points upgrade was selected
                 upgradeIndex = data.pointsMultiplierIndex;
                 name = "Points Multiplier";
                 desc = "Increases the number of points gained from platforms";
-                val = "Current value: " + data.pointsMultiplierIndex + "x -> " + (data.pointsMultiplierIndex + 1) + "x";
+                if (upgradeIndex >= 5)
+                    val = "Current value: " + data.pointsMultiplierIndex + "x";
+                else
+                    val = "Current value: " + data.pointsMultiplierIndex + "x -> " + (data.pointsMultiplierIndex + 1) + "x";
                 break;
             case 2: // Gem upgrade was selected
                 upgradeIndex = data.gemValueMultiplierIndex;
                 name = "Gem Value";
                 desc = "Increases the value of gems";
-                val = "Current value: +" + data.pointsMultiplierIndex + " -> +" + (data.pointsMultiplierIndex + 1);
+                if (upgradeIndex >= 5)
+                    val = "Current value: +" + data.gemValueMultiplierIndex;
+                else
+                    val = "Current value: +" + data.gemValueMultiplierIndex + " -> +" + (data.gemValueMultiplierIndex + 1);
                 break;
         }
 
-        cost = 10 * (upgradeIndex+1) * upgradeIndex;
+        cost = 10 * (upgradeIndex+2) * (upgradeIndex+1);
+        costString = "Cost: " + cost + " Gems";
+        if (upgradeIndex >= 5) {
+            costString = "MAXED UPGRADE";
+        }
 
-        if (cost > data.currency) {
+        if (cost > data.currency || upgradeIndex >= 5) {
             //set cost amount colour to red if not enough gems
             buyButton.GetComponent<Button>().interactable = false;
         } else {
             buyButton.GetComponent<Button>().interactable = true;
         }
 
-        UpdateLabels(name, desc, val, "Cost: " + cost + " Gems");
+        UpdateLabels(name, desc, val, costString);
     }
 
     private void UpdateLabels(string name, string desc, string value, string cost) {
@@ -71,18 +85,24 @@ public class UpgradesMenu : MonoBehaviour {
     } 
 
     public void UpgradeValue() {
-        switch (upgradeIndex) {
+        switch (currentIndex) {
             case 0:
-                data.jumpHeightModifier += 0.1f;
-                data.jumpHeightModifierIndex++;
+                if (data.jumpHeightModifierIndex < 5) {
+                    data.jumpHeightModifier += 0.1f;
+                    data.jumpHeightModifierIndex++;
+                }
                 break;
             case 1:
-                data.pointsMultiplier += 1;
-                data.pointsMultiplierIndex++;
+                if (data.pointsMultiplierIndex < 5) {
+                    data.pointsMultiplier += 1;
+                    data.pointsMultiplierIndex++;
+                }
                 break;
             case 2:
-                data.gemValueMultiplier += 1;
-                data.gemValueMultiplierIndex++;
+                if (data.gemValueMultiplierIndex < 5) {
+                    data.gemValueMultiplier += 1;
+                    data.gemValueMultiplierIndex++;
+                }
                 break;
         }
         data.currency -= cost;
