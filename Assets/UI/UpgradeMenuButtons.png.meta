@@ -7,6 +7,7 @@ TextureImporter:
     21300004: Gem Icon
     21300006: Separator
     21300008: Button
+    21300010: Pause Icon
   externalObjects: {}
   serializedVersion: 7
   mipmaps:
@@ -239,6 +240,26 @@ TextureImporter:
       tessellationDetail: 0
       bones: []
       spriteID: 6f2310805be81a94ead4d85a1cb19883
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Pause Icon
+      rect:
+        serializedVersion: 2
+        x: 264
+        y: 551
+        width: 38
+        height: 38
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 48b45d84b6da61d4ab23e25c83cde817
       vertices: []
       indices: 
       edges: []
