@@ -10,10 +10,8 @@ public class PlayerController : MonoBehaviour {
 
     //change to public later
     float movementSpeed = 5f;
-    float maxMovementSpeed = 3f;
     float jumpSpeed = 6f;
     float fallModifier = 1.5f;
-    float maxFallSpeed = 5f;
 
     //upgrade modifiers
     float movementSpeedMultiplier;
@@ -26,21 +24,20 @@ public class PlayerController : MonoBehaviour {
     bool canJump = false;
     bool doubleJump = true;
     bool isJumping = false;
-    bool gameStarted = false;
-    bool paused = false;
+    public bool paused = false;
 
     int points;
     int currency;
     int life;
 
-    public GameObject gameUI;
-    public GameObject pauseScreen;
     public GameObject gameOverScreen;
+    public GameObject gameUIScreen;
 
     public GameObject[] hitpoints = new GameObject[3];
     public TextMeshProUGUI heightText;
+    public TextMeshProUGUI[] pauseText = new TextMeshProUGUI[3];
+    public TextMeshProUGUI[] gameOverText = new TextMeshProUGUI[6];
     Rigidbody2D rb;
-    Vector2 velocity = new Vector2(0,0);
 
     void Awake() {
         rb = GetComponent<Rigidbody2D>();
@@ -60,14 +57,17 @@ public class PlayerController : MonoBehaviour {
         }
         lastY = transform.position.y;
         //gets left & right input
-        horizontalMove = Input.GetAxisRaw("Horizontal");
+        if (!paused) {
+            horizontalMove = Input.GetAxisRaw("Horizontal");
 
-        //gets jump imput
-        if (Input.GetKeyDown(KeyCode.Space)) {
-            if (canJump || doubleJump) {
-                isJumping = true;
-            } if (doubleJump) {
-                doubleJump = false;
+            //gets jump imput
+            if (Input.GetKeyDown(KeyCode.Space)) {
+                if (canJump || doubleJump) {
+                    isJumping = true;
+                }
+                if (doubleJump) {
+                    doubleJump = false;
+                }
             }
         }
     }
@@ -76,10 +76,12 @@ public class PlayerController : MonoBehaviour {
     void FixedUpdate () {
 
         //changes gravity to make player fall faster
-        if (rb.velocity.y < 0) {
-            rb.gravityScale = fallModifier;
-        } else {
-            rb.gravityScale = 1f;
+        if (!paused) {
+            if (rb.velocity.y < 0) {
+                rb.gravityScale = fallModifier;
+            } else {
+                rb.gravityScale = 1f;
+            }
         }
 
         //adds force for jumping
@@ -113,30 +115,36 @@ public class PlayerController : MonoBehaviour {
         doubleJump = false;
     }
 
-    public void Pause() {
-        GlobalSettings.speed = 0.0f;
-        pauseScreen.SetActive(true);
-        paused = true;
-    }
-
-    public void UnPause() {
-        pauseScreen.SetActive(true);
-        GlobalSettings.speed = 1.0f;
-        paused = false;
+    public void UpdatePauseStats() {
+        pauseText[0].text = "Current Height: " + height + "m";
+        pauseText[1].text = "Points Gained: " + points + "pts";
+        pauseText[2].text = "Your Gems: " + currency + " Gems";
     }
 
     private void GameOver() {
+        data.currency += currency;
+        if (height > data.bestHeight) {
+            data.bestHeight = height;
+        }
+        if (points > data.bestScore) {
+            data.bestScore = points;
+        }
+        //user score
+        gameOverText[0].text = "Height: " + height + "m";
+        gameOverText[1].text = "Score: " + points + "pts";
+        //user personal best
+        gameOverText[2].text = "Height: " + data.bestHeight + "m";
+        gameOverText[3].text = "Score: " + data.bestScore + "pts";
+        gameOverText[4].text = currency + " Gems Gained";
+        gameOverText[5].text = "Total Gems: " + data.currency;
         //end spawners?
         GlobalSettings.speed = 0.0f;
+        rb.isKinematic = true;
         //Disable current UI when game ends or overlay game over screen on top of it
         //show game over screen, enable all gameover screens, disable all ingame spawners etc.
         //maybe some death animations
-        gameUI.SetActive(false);
-        pauseScreen.SetActive(false);
+        gameUIScreen.SetActive(false);
         gameOverScreen.SetActive(true);
-    }
-
-    private void Save() {
         SaveData.SaveGameData(data);
     }
 
@@ -149,7 +157,7 @@ public class PlayerController : MonoBehaviour {
 
     private void OnTriggerEnter2D(Collider2D collision) {
         if (collision.gameObject.layer == LayerMask.NameToLayer("Collectible")) {
-            currency += collision.gameObject.GetComponent<Collectible>().getValue();
+            currency += collision.gameObject.GetComponent<Collectible>().getValue() + data.gemValueMultiplier;
             collision.gameObject.SetActive(false);
         }
         if (collision.gameObject.layer == LayerMask.NameToLayer("Hazard")) {
