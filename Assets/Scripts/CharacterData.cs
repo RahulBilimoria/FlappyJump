@@ -26,7 +26,7 @@ public class CharacterData {
         jumpHeightModifierIndex = 0;
         pointsMultiplier = 1.0f;
         pointsMultiplierIndex = 0;
-        gemValueMultiplier = 1;
+        gemValueMultiplier = 0;
         gemValueMultiplierIndex = 0;
 
         bestHeight = 0;

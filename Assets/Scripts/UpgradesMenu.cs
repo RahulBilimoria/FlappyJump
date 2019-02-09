@@ -108,6 +108,7 @@ public class UpgradesMenu : MonoBehaviour {
         data.currency -= cost;
         playerMoney.GetComponent<TextMeshProUGUI>().text = data.currency + " Gems";
         SelectUpgrade(currentIndex);
+        SaveData.SaveGameData(data);
         //Needs to also update CharacterData
     }
 

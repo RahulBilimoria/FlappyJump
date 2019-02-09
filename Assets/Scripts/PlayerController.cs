@@ -116,7 +116,7 @@ public class PlayerController : MonoBehaviour {
     }
 
     public void UpdatePauseStats() {
-        pauseText[0].text = "Current Height: " + height + "m";
+        pauseText[0].text = "Current Height: " + (int)height + "m";
         pauseText[1].text = "Points Gained: " + points + "pts";
         pauseText[2].text = "Your Gems: " + currency + " Gems";
     }
@@ -130,10 +130,10 @@ public class PlayerController : MonoBehaviour {
             data.bestScore = points;
         }
         //user score
-        gameOverText[0].text = "Height: " + height + "m";
+        gameOverText[0].text = "Height: " + (int)height + "m";
         gameOverText[1].text = "Score: " + points + "pts";
         //user personal best
-        gameOverText[2].text = "Height: " + data.bestHeight + "m";
+        gameOverText[2].text = "Height: " + (int)data.bestHeight + "m";
         gameOverText[3].text = "Score: " + data.bestScore + "pts";
         gameOverText[4].text = currency + " Gems Gained";
         gameOverText[5].text = "Total Gems: " + data.currency;
@@ -191,7 +191,8 @@ public class PlayerController : MonoBehaviour {
     }
 
     private void OnTriggerExit2D(Collider2D collision) {
-        if (collision.gameObject.tag == "Finish") {
+        if (collision.gameObject.tag == "Finish" && GlobalSettings.gameStarted) {
+            GlobalSettings.gameStarted = false;
             GameOver();
         }
     }

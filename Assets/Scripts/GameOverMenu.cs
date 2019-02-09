@@ -7,7 +7,6 @@ public class GameOverMenu : MonoBehaviour {
     public GameObject gameOverScreen;
 
 	public void Retry() {
-        GlobalSettings.gameStarted = false;
         SceneManager.LoadScene("Game", LoadSceneMode.Single);
     }
 
